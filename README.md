@@ -51,8 +51,8 @@ conda activate spot
 git clone https://github.com/mnakash/spot_teleop.git
 cd spot_teleop
 
-# 3. system dependency (for audio feedback)
-sudo apt update && sudo apt install mpg123
+# 3. system dependency
+sudo apt update && sudo apt install mpg123 android-tools-adb
 
 # 4. install the package
 pip install .
@@ -73,7 +73,7 @@ git clone https://github.com/mnakash/spot_teleop.git
 cd spot_teleop
 
 # 3. system dependency
-sudo apt update && sudo apt install mpg123
+sudo apt update && sudo apt install mpg123 android-tools-adb
 
 # 4. install dependencies only
 pip install -r requirements.txt
