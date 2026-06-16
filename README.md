@@ -1,8 +1,7 @@
 # spot_teleop
 **Boston Dynamics Spot SDK 5.0 | Meta Quest 3 / SpaceMouse / Keyboard**
 
-A Python package for teleoperating Boston Dynamics Spot+Arm using Meta Quest 3, SpaceMouse, or keyboard, and recording demonstrations for action policy training.
-
+A Python package for teleoperating Boston Dynamics Spot+Arm using Meta Quest 3, SpaceMouse, or keyboard, and recording demonstrations for visomotor policy training (Diffusion, Flow-matching, pi0.5, etc.). Integrates a real-time Cartesian force-limiting compliance filter to protect the robot arm and environment during contact-rich tasks.
 <p align="center">
   <img src="doc/Spot_teleop.gif" width="360" alt="Spot Teleoperation Demo" />
 </p>
@@ -29,6 +28,7 @@ These human teleoperation demonstrations showcase diverse manipulation and mobil
 | **Safe start-up / shutdown** | Auto-acquires lease, clears Keepalive & Estop, undocks, stands, and power-offs cleanly. |
 | **No ROS, no Unity** | Pure Python on top of official `bosdyn-client==5.0.0`. |
 | **Quest 3 tracking pipeline** | Uses [`OculusReader`](https://github.com/rail-berkeley/oculus_reader) for sub-10 ms pose streaming. |
+| **Active Force Limiting** | Cartesian force protection dynamically blocks or scales commands pushing into obstacles to protect the arm and environment. |
 
 ---
 
@@ -138,6 +138,12 @@ python teleop_spot.py --teleop-type keyboard
 # if you want to record camera depth use: --use-depth
 # to disable force limit use: --force-limit-disable
 ```
+
+### Active Force-Limiting Safety Filter
+By default, the teleoperation script actively monitors contact forces on Spot's gripper (estimated from joint torques) and filters your commanded motions to prevent collisions and damage:
+- **How it works**: The system projects real-time contact forces into the direction of your commanded movement. If you attempt to push the arm against a solid surface, the command in the contact direction is continuously scaled down (from `100%` execution down to a complete `0%` block) as force transitions from soft to hard safety thresholds.
+- **Preserves sliding & retraction**: Even when the arm is pushed up against the hard force limit, you can still slide along the contact surface or safely pull the arm back/retract.
+- **To bypass**: If your task requires high-force pushes or heavy insertions, disable this protection with the `--force-limit-disable` flag.
 
 ---
 
