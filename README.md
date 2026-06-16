@@ -3,6 +3,20 @@
 
 A Python package for teleoperating Boston Dynamics Spot+Arm using Meta Quest 3, SpaceMouse, or keyboard, and recording demonstrations for action policy training.
 
+<p align="center">
+  <img src="doc/Spot_teleop.gif" width="360" alt="Spot Teleoperation Demo" />
+</p>
+
+---
+
+## Demonstration Showcase
+
+These human teleoperation demonstrations showcase diverse manipulation and mobility tasks successfully recorded using this framework:
+
+| Push, Pick & Place | Sweep Clean | Writing "A" |
+| :---: | :---: | :---: |
+| <img src="doc/push_pick_place.gif" width="220" alt="Push, Pick and Place Demo" /> | <img src="doc/sweep_claen.gif" width="220" alt="Sweep Clean Demo" /> | <img src="doc/writing_a.gif" width="220" alt="Writing A Demo" /> |
+
 ---
 
 ## Key Features
@@ -158,7 +172,7 @@ Each saved `.npz` contains one session dictionary with the following keys:
 | --------------------- | --------------------- | ---------------------------------------------------------------------------------- |
 | **images_0**          | `(N,H,W,C)` (dtype=object) | Eye-in-hand RGB camera frames; each element is an `HxW×3` `uint8` ndarray. |
 | **images_1**          | `(N,H,W,C)` (dtype=object) | Agentview RGB camera stream (`images_x`, x>=1) when external camera(s) are enabled. |
-| **arm\_joint\_names** | `(J,)` (dtype=`<U…`)  | The J joint‐names (strings) for all recorded “arm0.\*” joints.                     |
+| **arm\_joint\_names** | `(J,)` (string)       | The J joint-names (strings) for all recorded "arm0.*" joints.                     |
 | **arm\_q**            | `(N, J)` (float32)    | Joint positions at each timestep.                                                  |
 | **arm\_dq**           | `(N, J)` (float32)    | Joint velocities at each timestep.                                                 |
 | **ee\_pose**          | `(N, 7)` (float32)    | End‑effector pose in body frame: `[tx,ty,tz,qx,qy,qz,qw]`.                         |
@@ -190,7 +204,7 @@ data/
 |        ├── images_0_depth         (shape=(N, 240, 320), dtype=uint16)
 |        ├── images_1               (shape=(N, 240, 320, 3), dtype=uint8)
 |        ├── images_1_depth         (shape=(N, 240, 320), dtype=uint16)
-|        ├── t                      (shape=(N, 1), dtype=float32)
+|        ├── t                      (shape=(N, 1), dtype=float64)
 |        └── vision_in_body         (shape=(N, 7), dtype=float32)
 ├── demo_1/
 ...
