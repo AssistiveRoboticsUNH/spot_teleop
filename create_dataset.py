@@ -1,8 +1,8 @@
 '''
-This script is used to create hf datasete from demos/*.npz files
+This script is used to create hf datasets from recorded npz files.
 
 Usage:
-python3 create_dataset.py <dataset file name>
+python3 create_dataset.py --output my_dataset.h5 [--input_dir data/]
 
 Author: Moniruzzaman Akash
 '''
@@ -11,6 +11,7 @@ import numpy as np
 import h5py
 from pathlib import Path
 import sys, os
+import argparse
 
 
 # ---------- helpers ----------------------------------------------------------
@@ -175,15 +176,32 @@ def build_hdf5_from_npz(demos_dir: Path, h5_path: Path):
 
 # ----------------------------------------------------------------------
 if __name__ == "__main__":
-    demos_folder = Path("demos")   # folder with *.npz files
-    # get deemo output file name from arguments or use default
-    if len(sys.argv) > 1:
-        output_h5 = Path(sys.argv[1])
-    else:
-        output_h5 = Path("demos.h5")
+    parser = argparse.ArgumentParser(description="Convert NPZ demonstrations to HDF5 dataset.")
+    parser.add_argument(
+        "--output", "-o",
+        required=True,
+        help="Path to the output HDF5 file (e.g., my_dataset.h5). Automatically appends '.h5' if missing."
+    )
+    parser.add_argument(
+        "--input_dir", "-i",
+        default="data",
+        help="Directory containing the recorded .npz files. Default is 'data'."
+    )
+    args = parser.parse_args()
+
+    output_name = args.output
+    if not output_name.endswith(".h5"):
+        output_name += ".h5"
+
+    output_h5 = Path(output_name)
+    demos_folder = Path(args.input_dir)
 
     if os.path.exists(output_h5):
-        print(f"Output file {output_h5} already exists. Please use different name.")
+        print(f"Output file '{output_h5}' already exists. Please use a different name.")
+        sys.exit(1)
+
+    if not os.path.exists(demos_folder):
+        print(f"Input directory '{demos_folder}' does not exist.")
         sys.exit(1)
 
     build_hdf5_from_npz(demos_folder, output_h5)

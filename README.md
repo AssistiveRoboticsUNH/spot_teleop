@@ -168,6 +168,17 @@ pyproject.toml                <- Package metadata & dependencies
 examples/                     <- Camera & input device examples
 ```
 
+## Creating HDF5 Datasets
+
+You can compile your recorded `.npz` demonstrations into a consolidated `.h5` dataset file for training policy networks using `create_dataset.py`:
+
+```bash
+# Basic usage (reads from default 'data/' input directory and writes to 'my_dataset.h5')
+python3 create_dataset.py --output my_dataset
+
+# Specify both custom output name and a custom input directory containing .npz files
+python3 create_dataset.py --output my_dataset --input_dir custom_demos_folder
+```
 
 ## .npz File Structure
 
