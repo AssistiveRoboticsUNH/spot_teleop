@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-This script reads the transformations and button states from the Oculus Quest controller using ADB.
-main script from: https://github.com/rail-berkeley/oculus_reader/
-Optimized by: Moniruzzaman Akash
+This script reads the transformations and button states from the Meta Quest controllers using ADB.
+Headset app: RoboQuest (https://github.com/MnAkash/RoboQuest)
+Author: Moniruzzaman Akash
 """
 import numpy as np
 import threading
@@ -79,7 +79,7 @@ class OculusReader:
     def __init__(self,
             ip_address=None,
             port = 5555,
-            APK_name='com.rail.oculus.teleop',
+            APK_name='com.roboquest.app',
             print_FPS=False,
             run=True
         ):
@@ -107,7 +107,7 @@ class OculusReader:
 
     def run(self):
         self.running = True
-        self.device.shell('am start -n "com.rail.oculus.teleop/com.rail.oculus.teleop.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER')
+        self.device.shell('am start -n "com.roboquest.app/com.roboquest.app.MainActivity" -a android.intent.action.MAIN -c android.intent.category.LAUNCHER')
         self.thread = threading.Thread(target=self.device.shell, args=("logcat -T 0", self.read_logcat_by_line))
         self.thread.start()
 
@@ -324,9 +324,7 @@ class OculusReader:
             if not installed or reinstall:
                 if APK_path is None:
                     apk_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'APK')
-                    APK_path = os.path.join(apk_dir, 'OculusTeleop-debug.apk')
-                    if not os.path.exists(APK_path):
-                        APK_path = os.path.join(apk_dir, 'teleop-debug.apk')
+                    APK_path = os.path.join(apk_dir, 'roboquest-debug.apk')
                 success = self.device.install(APK_path, test=True, reinstall=reinstall)
                 installed = self.device.is_installed(self.APK_name)
                 if installed and success:

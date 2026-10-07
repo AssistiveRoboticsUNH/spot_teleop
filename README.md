@@ -27,7 +27,7 @@ These human teleoperation demonstrations showcase diverse manipulation and mobil
 | **Demo recording** | Record RGB+depth images, joint states, EE poses, body velocity into `.npz` / `.h5` for policy training. |
 | **Safe start-up / shutdown** | Auto-acquires lease, clears Keepalive & Estop, undocks, stands, and power-offs cleanly. |
 | **No ROS, no Unity** | Pure Python on top of official `bosdyn-client==5.0.0`. |
-| **Quest 3 tracking pipeline** | Uses [`OculusReader`](https://github.com/rail-berkeley/oculus_reader) for sub-10 ms pose streaming. |
+| **Quest 3 tracking pipeline** | Runs the [`RoboQuest`](https://github.com/MnAkash/RoboQuest) headset app for sub-10 ms pose streaming. |
 | **Active Force Limiting** | Cartesian force protection dynamically blocks or scales commands pushing into obstacles to protect the arm and environment. |
 
 ---
@@ -119,7 +119,14 @@ echo $BOSDYN_CLIENT_PASSWORD
 ---
 
 ## Setup Meta Quest Controller
-Follow the guidelines in the [`OculusReader`](https://github.com/jborbik/oculus_reader) repo for setting up Meta Quest Controller over WiFi or USB.
+Teleop streams controller poses from the [`RoboQuest`](https://github.com/MnAkash/RoboQuest) headset app, which ships with this repo in `spot_teleop/APK/` and is installed on the headset automatically on first run.
+
+One-time headset setup:
+1. Enable **Developer Mode** for the headset in the Meta Horizon phone app.
+2. Connect the headset with USB, put it on and accept **Allow USB debugging**.
+3. Keep the headset on the same WiFi network as this computer.
+
+After that, `--teleop-type meta` finds the headset, switches it to wireless ADB and remembers the address, so the cable can stay unplugged. If the headset is not found, teleop asks you to plug it in and press Enter to retry. `check_meta.sh` is available to inspect the connection separately.
 
 ---
 
@@ -156,7 +163,7 @@ spot_teleop/                  <- Python package
 ├── spot_images.py            # Camera source helpers
 ├── camera_streamer.py        # Threaded camera streaming
 ├── demo_recorder.py          # NPZ/H5 demo recording
-├── reader.py                 # OculusReader integration
+├── reader.py                 # RoboQuest headset app reader
 └── utils/
     ├── spot_utils.py         # Math & conversion helpers
     └── teleop_inputs.py      # Meta / SpaceMouse / Keyboard input helpers
@@ -165,7 +172,7 @@ teleop_spot.py                <- Teleop entry point (meta / spacemouse / keyboar
 create_dataset.py             <- Build .h5 dataset from .npz demos
 replay_hdf5.py                <- Replay recorded actions on Spot
 pyproject.toml                <- Package metadata & dependencies
-examples/                     <- Camera & input device examples
+scripts/                      <- Camera, input device & dataset utilities
 ```
 
 ## Creating HDF5 Datasets
