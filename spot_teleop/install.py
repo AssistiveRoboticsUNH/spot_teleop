@@ -1,4 +1,4 @@
-from reader import OculusReader
+from reader import RoboQuestReader
 
 def main():
     import argparse
@@ -8,7 +8,7 @@ def main():
     parser.add_argument("--uninstall", action="store_true", help='uninstalls APK')
     args = parser.parse_args()
 
-    reader = OculusReader(run=False)
+    reader = RoboQuestReader(run=False)
 
     if args.reinstall:
         reader.install(reinstall=True)

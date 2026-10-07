@@ -7,9 +7,9 @@ import time
 from typing import Dict, Tuple
 
 try:
-    from spot_teleop.reader import OculusReader
+    from spot_teleop.reader import RoboQuestReader
 except ImportError:
-    from ..reader import OculusReader
+    from ..reader import RoboQuestReader
 
 try:
     from pynput import keyboard as pynput_keyboard
@@ -24,7 +24,7 @@ except Exception:
 
 class MetaInputHelper:
     def __init__(self, meta_quest_ip=None):
-        self.reader = OculusReader(ip_address=meta_quest_ip)
+        self.reader = RoboQuestReader(ip_address=meta_quest_ip)
 
     def get(self):
         return self.reader.get_transformations_and_buttons()

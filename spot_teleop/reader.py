@@ -75,7 +75,7 @@ class FPSCounter:
         return frequency
     
   
-class OculusReader:
+class RoboQuestReader:
     def __init__(self,
             ip_address=None,
             port = 5555,
@@ -414,7 +414,7 @@ class OculusReader:
                 line = file_obj.readline().strip()
                 data = self.extract_data(line)
                 if data:
-                    transforms, buttons = OculusReader.process_data(data)
+                    transforms, buttons = RoboQuestReader.process_data(data)
                     with self._lock:
                         self.last_transforms, self.last_buttons = transforms, buttons
                     if self.print_FPS:
@@ -440,9 +440,9 @@ def get_connecteed_device_ip():
     try:
         client = AdbClient(host="127.0.0.1", port=5037)
         for device in client.devices():
-            if OculusReader._is_network_serial(device.serial):
+            if RoboQuestReader._is_network_serial(device.serial):
                 return device.serial.split(':', 1)[0]
-            ip = OculusReader._extract_device_ip(device)
+            ip = RoboQuestReader._extract_device_ip(device)
             if ip is not None:
                 return ip
         print("Has no access! Please connect the device via USB and allow access.")
@@ -456,17 +456,17 @@ def main():
     # IP_ADDRESS = None # Use meta quest IP e.g "192.168.1.54" if you want to control over wifi.
     IP_ADDRESS = get_connecteed_device_ip() # Use None if connected over USB
 
-    oculus_reader = OculusReader(ip_address=IP_ADDRESS)
+    reader = RoboQuestReader(ip_address=IP_ADDRESS)
 
     try:
         while True:
             time.sleep(0.1)
-            poses, buttons = oculus_reader.get_transformations_and_buttons()
+            poses, buttons = reader.get_transformations_and_buttons()
             print(poses)
             print(buttons)
     except KeyboardInterrupt:
         print("Interrupted by user. Stopping...")
-        oculus_reader.stop()
+        reader.stop()
 
 
 if __name__ == '__main__':

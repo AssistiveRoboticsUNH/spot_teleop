@@ -1,6 +1,6 @@
 """Live plot of Meta Quest right-controller position vs time.
 
-Connects to the Quest via the same OculusReader used by teleop, then live-plots
+Connects to the Quest via the same RoboQuestReader used by teleop, then live-plots
 the right-controller position (x, y, z) against elapsed wall-clock time in a
 rolling window. Move the controller and watch the traces track in real time; a
 freeze-then-jump indicates lag in the input stream.
@@ -16,7 +16,7 @@ from collections import deque
 import numpy as np
 import matplotlib.pyplot as plt
 
-from spot_teleop.reader import OculusReader, get_connecteed_device_ip
+from spot_teleop.reader import RoboQuestReader, get_connecteed_device_ip
 
 HAND = "r"  # which controller to watch: 'r' (arm control) or 'l'
 WINDOW_SEC = 10.0  # seconds of history to show
@@ -34,7 +34,7 @@ def get_position(transforms):
 def main():
     meta_ip = os.environ.get("META_QUEST_IP") or get_connecteed_device_ip()
     print(f"Connecting to Meta Quest (ip={meta_ip}) ...")
-    reader = OculusReader(ip_address=meta_ip)
+    reader = RoboQuestReader(ip_address=meta_ip)
 
     plt.ion()
     fig, ax = plt.subplots(figsize=(9, 5))
